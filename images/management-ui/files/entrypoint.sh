@@ -1,10 +1,17 @@
-#!/bin/bash
+#!/bin/sh
+echo CONFD_NODE : $CONFD_NODE
+echo CONFD_PREFIX : $CONFD_PREFIX
 
-setup() {
-    echo "Configure management api url to ${MGMT_API_URL}"
-    cat /var/www/html/constants.json.template | \
-    sed "s#http://localhost:8083/management/#${MGMT_API_URL}#g" > /var/www/html/constants.json
-}
-
-setup
+cat /etc/hosts
+if [ ! -z $CONFD_NODE ]
+then
+    mv /var/www/html/constants.json /constants.json.ori
+    if [ ! -z $CONFD_NODE ]
+    then
+        /opt/confd/bin/confd -onetime -backend consul -node $CONFD_NODE -prefix="$CONFD_PREFIX" -log-level="debug"
+    else
+        /opt/confd/bin/confd -onetime -backend consul -node $CONFD_NODE -log-level="debug"
+    fi
+fi
+echo "Gravitee.io APIM Webui is ready."
 exec "$@"
