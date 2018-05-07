@@ -13,7 +13,6 @@
 version: '2'
 
 volumes:
-  datamongo: {}
   dataelasticsearch: {}
 
 services:
@@ -31,20 +30,19 @@ services:
     ulimits:
       nofile: 65536
 
-  mongodb:
-    hostname: demo-mongodb
-    image: mongo:3.6
-    volumes:
-      - datamongo:/data/db
+  redisdb:
+    hostname: demo-redisdb
+    image: redis:3.2.11-alpine
 
   gateway:
     hostname: demo-gateway
-    image: graviteeio/gateway:latest
+    #image: graviteeio/gateway:latest
+    image: smartlab/gravitee-gateway:latest
     #links:
     #  - mongodb
     #  - elasticsearch
     environment:
-      - GRAVITEEIO_MONGODB_HOST=mongodb
+      - GRAVITEEIO_REDISDB_HOST=redisdb
       - GRAVITEEIO_ELASTIC_HOST=elasticsearch
 
   managementui:
@@ -53,10 +51,11 @@ services:
 
   managementapi:
     hostname: demo-managementapi
-    image: graviteeio/management-api:latest
+    #image: graviteeio/management-api:latest
+    image: smartlab/gravitee-management-api:latest
     #links:
     #  - mongodb
     #  - elasticsearch
     environment:
-      - GRAVITEEIO_MONGODB_HOST=mongodb
+      - GRAVITEEIO_REDISDB_HOST=mongodb
       - GRAVITEEIO_ELASTIC_HOST=elasticsearch

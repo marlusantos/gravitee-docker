@@ -14,6 +14,7 @@ FROM graviteeio/java:8
 MAINTAINER Gravitee Team <http://gravitee.io>
 
 ARG GRAVITEEIO_VERSION=0
+ARG GRAVITEEIO_REPOSITORY_REDIS_VERSION=0
 
 # Update to get support for Zip/Unzip, nc and wget
 RUN apk add --update zip unzip netcat-openbsd wget
@@ -21,9 +22,12 @@ RUN apk add --update zip unzip netcat-openbsd wget
 RUN wget https://download.gravitee.io/graviteeio-apim/distributions/graviteeio-full-${GRAVITEEIO_VERSION}.zip --no-check-certificate -P /tmp/ \
     && unzip /tmp/graviteeio-full-${GRAVITEEIO_VERSION}.zip -d /tmp/ \
     && mv /tmp/graviteeio-full-${GRAVITEEIO_VERSION}/graviteeio-gateway* /opt/graviteeio-gateway \
+    && wget https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-${GRAVITEEIO_REPOSITORY_REDIS_VERSION}.zip --no-check-certificate -P /tmp/ \
+    && mv /tmp/gravitee-repository-redis-${GRAVITEEIO_REPOSITORY_REDIS_VERSION}.zip /opt/graviteeio-gateway/plugins/ \
     && rm -rf /tmp/*
 
 ENV GRAVITEEIO_HOME /opt/graviteeio-gateway
+
 WORKDIR ${GRAVITEEIO_HOME}
 
 EXPOSE 8082

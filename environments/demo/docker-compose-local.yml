@@ -10,42 +10,51 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 #-------------------------------------------------------------------------------
+# Changes:
+#   - Repository: Mongo to Redis
+#   - Volumes: Use gravitee.yml as volume. 
+#   - Developer need create files: 
+#       - conf/gateway/gravitee.yml
+#       - conf/management-api/gravitee.yml
+#-------------------------------------------------------------------------------
 version: '2'
 
 volumes:
-  local_datamongo: {}
   local_dataelasticsearch: {}
 
 services:
   local_elasticsearch:
     extends:
       file: common.yml
-      service: elasticsearch
+      service: elasticsearch    
     volumes:
       - local_dataelasticsearch:/usr/share/elasticsearch/data
       - ./logs/elasticsearch:/var/log/elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
 
-  local_mongodb:
+  local_redisdb:
     extends:
       file: common.yml
-      service: mongodb
-    volumes:
-      - local_datamongo:/data/db
-      - ./logs/mongodb:/var/log/mongodb
+      service: redisdb
+    ports:
+      - "6379:6379"
 
   local_gateway:
     extends:
       file: common.yml
       service: gateway
     links:
-      - "local_mongodb:demo-mongodb"
+      - "local_redisdb:demo-redisdb"
       - "local_elasticsearch:demo-elasticsearch"
     ports:
       - "8000:8082"
     volumes:
       - ./logs/gateway:/etc/gravitee.io/log
+      - ./conf/gateway/gravitee.yml:/opt/graviteeio-gateway/config/gravitee.yml
     environment:
-      - GRAVITEEIO_MONGODB_HOST=demo-mongodb
+      - GRAVITEEIO_REDISDB_HOST=demo-redisdb
       - GRAVITEEIO_ELASTIC_HOST=demo-elasticsearch
 
   local_managementui:
@@ -67,9 +76,10 @@ services:
       - "8005:8083"
     volumes:
       - ./logs/management-api:/home/gravitee/logs
+      - ./conf/management-api/gravitee.yml:/opt/graviteeio-management-api/config/gravitee.yml
     links:
-      - "local_mongodb:demo-mongodb"
+      - "local_redisdb:demo-redisdb"
       - "local_elasticsearch:demo-elasticsearch"
     environment:
-      - GRAVITEEIO_MONGODB_HOST=demo-mongodb
+      - GRAVITEEIO_REDISDB_HOST=demo-redisdb
       - GRAVITEEIO_ELASTIC_HOST=demo-elasticsearch
