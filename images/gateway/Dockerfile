@@ -36,6 +36,8 @@ WORKDIR ${GRAVITEEIO_HOME}
 
 COPY startup.sh set-env.sh /opt/graviteeio-gateway/bin/
 
+RUN chmod +x /opt/graviteeio-gateway/bin/*
+
 EXPOSE 8082
 VOLUME ["/opt/graviteeio-gateway/logs"]
 CMD ["./bin/startup.sh"]
