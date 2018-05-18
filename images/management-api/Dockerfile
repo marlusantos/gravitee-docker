@@ -23,13 +23,18 @@ RUN wget https://download.gravitee.io/graviteeio-apim/distributions/graviteeio-f
     && unzip /tmp/graviteeio-full-${GRAVITEEIO_VERSION}.zip -d /tmp/ \
     && mv /tmp/graviteeio-full-${GRAVITEEIO_VERSION}/graviteeio-management-api* /opt/graviteeio-management-api \
     && wget https://download.gravitee.io/graviteeio-apim/plugins/repositories/gravitee-repository-redis/gravitee-repository-redis-${GRAVITEEIO_REPOSITORY_REDIS_VERSION}.zip --no-check-certificate -P /tmp/ \
-    && mv /tmp/gravitee-repository-redis-${GRAVITEEIO_REPOSITORY_REDIS_VERSION}.zip /opt/graviteeio-management-api/plugins/ \    
+    && mv /tmp/gravitee-repository-redis-${GRAVITEEIO_REPOSITORY_REDIS_VERSION}.zip /opt/graviteeio-management-api/plugins/ \
+    && wget https://oss.sonatype.org/content/groups/public/com/loopfor/zookeeper/zookeeper-cli/1.4/zookeeper-cli-1.4.zip  --no-check-certificate -P /tmp/ \
+    && mv /tmp/zookeeper-cli-1.4 /opt/ \
+    && chmod +x /opt/zookeeper-cli-1.4/bin/zk \    
     && rm -rf /tmp/*
 
 ENV GRAVITEEIO_HOME /opt/graviteeio-management-api
 
 WORKDIR ${GRAVITEEIO_HOME}
 
+COPY startup.sh set-env.sh /opt/graviteeio-gateway/bin/
+
 EXPOSE 8083
 VOLUME ["/opt/graviteeio-management-api/logs"]
-CMD ["./bin/gravitee"]
+CMD ["./bin/startup.sh"]
