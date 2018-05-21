@@ -34,7 +34,7 @@ ENV GRAVITEEIO_HOME /opt/graviteeio-management-api
 
 WORKDIR ${GRAVITEEIO_HOME}
 
-COPY startup.sh set-env.sh /opt/graviteeio-management-api/bin/
+COPY startup.sh /opt/graviteeio-management-api/bin/
 
 RUN chmod +x /opt/graviteeio-management-api/bin/*
 

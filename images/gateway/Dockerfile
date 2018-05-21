@@ -34,7 +34,7 @@ ENV GRAVITEEIO_HOME /opt/graviteeio-gateway
 
 WORKDIR ${GRAVITEEIO_HOME}
 
-COPY startup.sh set-env.sh /opt/graviteeio-gateway/bin/
+COPY startup.sh /opt/graviteeio-gateway/bin/
 
 RUN chmod +x /opt/graviteeio-gateway/bin/*
 
