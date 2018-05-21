@@ -40,4 +40,4 @@ RUN chmod +x /opt/graviteeio-gateway/bin/*
 
 EXPOSE 8082
 VOLUME ["/opt/graviteeio-gateway/logs"]
-CMD ["sh -l ./bin/startup.sh"]
+CMD ["./bin/startup.sh"]
