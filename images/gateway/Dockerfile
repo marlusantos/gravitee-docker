@@ -19,6 +19,8 @@ ARG GRAVITEEIO_REPOSITORY_REDIS_VERSION=0
 # Update to get support for Zip/Unzip, nc and wget
 RUN apk add --update zip unzip netcat-openbsd wget
 
+COPY gravitee.yml startup.sh /tmp/
+
 RUN wget https://download.gravitee.io/graviteeio-apim/distributions/graviteeio-full-${GRAVITEEIO_VERSION}.zip --no-check-certificate -P /tmp/ \
     && unzip /tmp/graviteeio-full-${GRAVITEEIO_VERSION}.zip -d /tmp/ \
     && mv /tmp/graviteeio-full-${GRAVITEEIO_VERSION}/graviteeio-gateway* /opt/graviteeio-gateway \
@@ -28,15 +30,14 @@ RUN wget https://download.gravitee.io/graviteeio-apim/distributions/graviteeio-f
     && unzip /tmp/zookeeper-cli-1.4.zip -d /tmp/ \    
     && mv /tmp/zookeeper-cli-1.4 /opt/ \
     && chmod +x /opt/zookeeper-cli-1.4/bin/zk \
+    && mv /tmp/startup.sh /opt/graviteeio-gateway/bin/ \
+    && chmod +x /opt/graviteeio-gateway/bin/startup.sh \
+    && mv /tmp/gravitee.yml /opt/graviteeio-gateway/config/ \
     && rm -rf /tmp/*
 
 ENV GRAVITEEIO_HOME /opt/graviteeio-gateway
 
 WORKDIR ${GRAVITEEIO_HOME}
-
-COPY startup.sh /opt/graviteeio-gateway/bin/
-
-RUN chmod +x /opt/graviteeio-gateway/bin/*
 
 EXPOSE 8082
 VOLUME ["/opt/graviteeio-gateway/logs"]
