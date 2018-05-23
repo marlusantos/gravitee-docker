@@ -16,7 +16,7 @@ MAINTAINER Gravitee Team <http://gravitee.io>
 ARG GRAVITEEIO_VERSION=0
 ARG GRAVITEEIO_REPOSITORY_REDIS_VERSION=0
 
-# Update to get support for Zip/Unzip, nc and wget
+# Update to get support for Zip/Unzip, nc and wget .
 RUN apk add --update zip unzip netcat-openbsd wget
 
 COPY gravitee.yml startup.sh /tmp/
