@@ -30,9 +30,9 @@ RUN wget https://download.gravitee.io/graviteeio-apim/distributions/graviteeio-f
     && unzip /tmp/zookeeper-cli-1.4.zip -d /tmp/ \
     && mv /tmp/zookeeper-cli-1.4 /opt/ \
     && chmod +x /opt/zookeeper-cli-1.4/bin/zk \
-    && mv /tmp/startup.sh /opt/graviteeio-gateway/bin/ \
-    && chmod +x /opt/graviteeio-gateway/bin/startup.sh \
-    && mv /tmp/gravitee.yml /opt/graviteeio-gateway/config/ \
+    && mv /tmp/startup.sh /opt/graviteeio-management-api/bin/ \
+    && chmod +x /opt/graviteeio-management-api/bin/startup.sh \
+    && mv /tmp/gravitee.yml /opt/graviteeio-management-api/config/ \
     && rm -rf /tmp/*
 
 ENV GRAVITEEIO_HOME /opt/graviteeio-management-api
