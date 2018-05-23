@@ -1,2 +1,2 @@
 #!/bin/sh
-docker build --build-arg GRAVITEEIO_VERSION=1.15.1 --build-arg GRAVITEEIO_REPOSITORY_REDIS_VERSION=1.15.0 .
+docker build --build-arg GRAVITEEIO_VERSION=1.16.1 --build-arg GRAVITEEIO_REPOSITORY_REDIS_VERSION=1.16.0 .
